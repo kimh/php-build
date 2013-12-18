@@ -646,18 +646,12 @@ $CONFIGURE_OPTIONS"
         export ac_cv_exeext=''
     fi
 
-    ./configure $argv > /dev/null
-
     # Use php-build prefix for the Apache libexec folder
-    cat <<EOF | patch -N -p1 -s || true
-*** 5.2.17-orig/Makefile 2012-11-26 19:10:33.000000000 +0900
---- 5.2.17/Makefile 2012-11-26 19:11:53.000000000 +0900
-***************
-*** 105 ****
-! INSTALL_IT = \$(mkinstalldirs) '\$(INSTALL_ROOT)/usr/libexec/apache2' && \$(mkinstalldirs) '\$(INSTALL_ROOT)/private/etc/apache2' && /usr/sbin/apxs -S LIBEXECDIR='\$(INSTALL_ROOT)/usr/libexec/apache2' -S SYSCONFDIR='\$(INSTALL_ROOT)/private/etc/apache2' -i -a -n php5 libs/libphp5.so
---- 105 ----
-! INSTALL_IT = \$(mkinstalldirs) '$PREFIX/libexec/apache2' && \$(mkinstalldirs) '\$(INSTALL_ROOT)/private/etc/apache2' && /usr/sbin/apxs -S LIBEXECDIR='$PREFIX/libexec/apache2' -S SYSCONFDIR='\$(INSTALL_ROOT)/private/etc/apache2' -i -a -n php5 libs/libphp5.so
-EOF
+    sed -i "s|'\$APXS_LIBEXECDIR'|'$PREFIX/libexec/apache2'|g" ./configure
+    # Don't activate php5 module just yet
+    sed -i "s|-i -a -n php5|-i -n php5|g" ./configure
+
+    ./configure $argv > /dev/null
 
     cd "$backup_pwd"
 }
