@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-PHP="/usr/bin/env php"
+PHP="$PREFIX/bin/php"
 
 install_composer() {
     download_composer
     copy_composer_phar
 
     log Composer "Installing executable in $PREFIX/bin/composer"
-    
+
     mv "$PREFIX/bin/composer.phar" "$PREFIX/bin/composer"
 
     chmod +x "$PREFIX/bin/composer"
@@ -17,7 +17,7 @@ download_composer() {
     local composer_url="$1"
 
     if [ -z "$composer_url" ]; then
-        composer_url="http://getcomposer.org/composer.phar"
+        composer_url="https://getcomposer.org/composer.phar"
     fi
 
     if [ ! -f "$TMP/packages/composer.phar" ]; then

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 #
+# This shell scriplet is meant to be included by other shell scripts
+# to set up some variables and a few helper shell functions.
+#
 # Plugin for php-build to install PHP extensions
 #
 
@@ -126,7 +129,7 @@ function _build_extension {
             $configure_args > /dev/null
 
         make > /dev/null
-	make install > /dev/null
+        make install > /dev/null
     } >&4 2>&1
 
     local extension_home="$PREFIX/share/$name"
