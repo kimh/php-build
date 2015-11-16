@@ -13,12 +13,17 @@ set -e
 test -n "${RBENV_DEBUG}" &&
   set -x
 
+# Provide rbenv completions
+if [ "$1" = "--complete" ]; then
+  exec rbenv-versions --bare
+fi
+
 test -z "${RBENV_ROOT}" &&
   RBENV_ROOT="${HOME}/.phpenv"
 
 CONFIRM=0
 VERSION=""
-HELP_MESSAGE=$(sed -E 's/^#\s?(.*)/\1/g' "${0}" | sed -nE '/^Usage/,/^Report/p')
+HELP_MESSAGE=$(sed -E 's/^#[[:space:]]?(.*)/\1/g' "${0}" | sed -nE '/^Usage/,/^Report/p')
 
 if [[ "${1}" == '--help' ]] || [[ "${1}" == '-h' ]]; then
   echo "${HELP_MESSAGE}"
@@ -53,7 +58,7 @@ if [[ ${CONFIRM} -eq 0 ]]; then
   echo -n "Are you sure you want to remove version ‘${VERSION}’? [y/N]: "
   read ANSWER
 
-  if [[ "${ANSWER,,}" = "y" ]]; then
+  if [[ "${ANSWER}" =~ ^[Yy]$ ]]; then
     CONFIRM=1
   fi
 fi
